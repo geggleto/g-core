@@ -1,0 +1,17 @@
+{
+    "name": "glenn/g-core",
+    "authors": [
+        {
+            "name": "Glenn Eggleton",
+            "email": "geggleto@gmail.com"
+        }
+    ],
+    "require": {
+        "slim/slim" : "^3.5"
+    },
+    "autoload" : {
+        "psr-4" : {
+            "G\\Core\\" : "src"
+        }
+    }
+}
