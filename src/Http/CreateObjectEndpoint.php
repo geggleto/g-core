@@ -78,7 +78,7 @@ abstract class CreateObjectEndpoint implements EndpointInterface
                 return $this->response->withJson(array("message" => $e->getMessage()), 500);
             }
         } else {
-            return $this->response->withJson($validator->getErrors(), 400);
+            return $this->response->withJson($this->validator->getErrors(), 400);
         }
     }
 }
