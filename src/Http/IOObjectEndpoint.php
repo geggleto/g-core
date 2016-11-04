@@ -51,10 +51,26 @@ abstract class IOObjectEndpoint implements EndpointInterface
         return $this->processObject($mapping, $table, $data);
     }
 
+    /**
+     * @param $id
+     * @param array $mapping
+     * @param $table
+     * @param array $data
+     *
+     * @return ResponseInterface
+     */
     public function updateObject($id, array $mapping, $table, $data = array()) {
         return $this->processObject($mapping, $table, $data, $id);
     }
 
+    /**
+     * @param array $mapping
+     * @param $table
+     * @param array $data
+     * @param int $id
+     *
+     * @return ResponseInterface
+     */
     protected function processObject(array $mapping, $table, $data = array(), $id=0) {
         $this->validator->setData($data);
 
