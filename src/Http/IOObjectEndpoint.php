@@ -13,7 +13,7 @@ use G\Core\Db\InsertBuilder;
 use G\Core\Services\ValidatorInterface;
 use Psr\Http\Message\ResponseInterface;
 
-abstract class CreateObjectEndpoint implements EndpointInterface
+abstract class IOObjectEndpoint implements EndpointInterface
 {
     /** @var InsertBuilder  */
     protected $builder;
@@ -48,6 +48,14 @@ abstract class CreateObjectEndpoint implements EndpointInterface
      * @return ResponseInterface
      */
     public function createObject(array $mapping, $table, $data = array()) {
+        return $this->processObject($mapping, $table, $data);
+    }
+
+    public function updateObject($id, array $mapping, $table, $data = array()) {
+        return $this->processObject($mapping, $table, $data, $id);
+    }
+
+    protected function processObject(array $mapping, $table, $data = array(), $id=0) {
         $this->validator->setData($data);
 
         if ($this->validator->validate()) {
@@ -63,9 +71,16 @@ abstract class CreateObjectEndpoint implements EndpointInterface
                     $builder->addColumn($item, $value);
                 }
 
+                if ($id === 0) {
+                    $this->builder->setId($id);
+                }
+
+
                 //Execute the builder
                 if ($builder->execute()) {
-                    $data['id'] = $this->builder->getDb()->lastInsertId();
+                    if ($id === 0) {
+                        $data['id'] = $this->builder->getDb()->lastInsertId();
+                    }
 
                     return $this->response->withJson($data);
 
