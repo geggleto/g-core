@@ -10,6 +10,7 @@ namespace G\Core\Http;
 
 
 use G\Core\Db\InsertBuilder;
+use G\Core\Db\IOQueryBuilder;
 use G\Core\Services\ValidatorInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -27,10 +28,10 @@ abstract class IOObjectEndpoint implements EndpointInterface
     /**
      * CreateUser constructor.
      *
-     * @param InsertBuilder $builder
+     * @param IOQueryBuilder $builder
      * @param ValidatorInterface $validator
      */
-    public function __construct(InsertBuilder $builder, ValidatorInterface $validator)
+    public function __construct(IOQueryBuilder $builder, ValidatorInterface $validator)
     {
         $this->builder = $builder;
         $this->validator = $validator;
