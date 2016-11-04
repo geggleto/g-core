@@ -21,27 +21,36 @@ abstract class CreateObjectEndpoint implements EndpointInterface
     /** @var ResponseInterface */
     protected $response;
 
+    /** @var ValidatorInterface  */
+    protected $validator;
+
     /**
      * CreateUser constructor.
      *
      * @param InsertBuilder $builder
+     * @param ValidatorInterface $validator
      */
-    public function __construct(InsertBuilder $builder)
+    public function __construct(InsertBuilder $builder, ValidatorInterface $validator)
     {
         $this->builder = $builder;
+        $this->validator = $validator;
     }
 
     /**
-     * @param ValidatorInterface $validator
+     * Validates, Mutates and persists data
+     *
+     * Mutates via Closures
+     *
      * @param array $mapping
      * @param $table
      * @param array $data
      *
      * @return ResponseInterface
      */
-    public function createObject(ValidatorInterface $validator, array $mapping, $table, $data = array()) {
+    public function createObject(array $mapping, $table, $data = array()) {
+        $this->validator->setData($data);
 
-        if ($validator->validate()) {
+        if ($this->validator->validate()) {
             try {
                 //Mutate the data
                 foreach ($mapping as $item => $mutator) {

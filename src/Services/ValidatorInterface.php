@@ -17,6 +17,8 @@ interface ValidatorInterface
 {
     public function validate();
 
+    public function setData(array $data);
+
     /**
      * @return array|bool
      */
