@@ -18,6 +18,9 @@ abstract class CreateObjectEndpoint implements EndpointInterface
     /** @var InsertBuilder  */
     protected $builder;
 
+    /** @var ResponseInterface */
+    protected $response;
+
     /**
      * CreateUser constructor.
      *
@@ -33,11 +36,10 @@ abstract class CreateObjectEndpoint implements EndpointInterface
      * @param array $mapping
      * @param $table
      * @param array $data
-     * @param ResponseInterface $response
      *
      * @return ResponseInterface
      */
-    public function createObject(ValidatorInterface $validator, array $mapping, $table, $data = array(), ResponseInterface $response) {
+    public function createObject(ValidatorInterface $validator, array $mapping, $table, $data = array()) {
 
         if ($validator->validate()) {
             try {
@@ -56,18 +58,18 @@ abstract class CreateObjectEndpoint implements EndpointInterface
                 if ($builder->execute()) {
                     $data['id'] = $this->builder->getDb()->lastInsertId();
 
-                    return $response->withJson($data);
+                    return $this->response->withJson($data);
 
                 } else {
-                    return $response->withJson(array("message" => "Object already exists"), 400);
+                    return $this->response->withJson(array("message" => "Object already exists"), 400);
                 }
 
 
             } catch (\Exception $e) {
-                return $response->withJson(array("message" => $e->getMessage()), 500);
+                return $this->response->withJson(array("message" => $e->getMessage()), 500);
             }
         } else {
-            return $response->withJson($validator->getErrors(), 400);
+            return $this->response->withJson($validator->getErrors(), 400);
         }
     }
 }
